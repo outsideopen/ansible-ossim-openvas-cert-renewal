@@ -1,0 +1,6 @@
+---
+# adjust cert lifetime to 4 years (this is in days)
+usm_openvas_cert_lifetime: 1460
+
+# seconds before a cert has to be renewed (default - 5 days)
+usm_openvas_cert_allowance: 432000

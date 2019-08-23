@@ -1,0 +1,23 @@
+---
+- name: Get scanner ID
+  shell: 'openvasmd --get-scanners | grep Default | head -n 1 | cut -d" " -f1'
+  register: scanner_id
+  changed_when: false
+
+- name: Install new scanner key
+  shell: "openvasmd --modify-scanner {{ scanner_id.stdout }} --scanner-ca-pub /var/lib/openvas/CA/cacert.pem --scanner-key-pub /var/lib/openvas/CA/clientcert.pem --scanner-key-priv /var/lib/openvas/private/CA/clientkey.pem"
+
+- name: restart services
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - openvas-scanner
+    - openvas-manager
+
+- name: Wait for the scanner to reload
+  shell: "ps ax | grep openvassd | grep Reloaded | grep -v grep"
+  register: scanner
+  retries: 100
+  failed_when: scanner.rc == 0
+  until: scanner.rc == 1

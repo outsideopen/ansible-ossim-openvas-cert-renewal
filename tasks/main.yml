@@ -1,0 +1,23 @@
+---
+- name: Check Certificate lifetime
+  shell: 'grep SRVCERT_LIFETIME="365" /usr/sbin/openvas-mkcert'
+  register: __usm_openvas_cert_lifetime
+  changed_when: false
+  failed_when: false
+
+- name: Update Certificate lifetime
+  when: __usm_openvas_cert_lifetime.rc == 0
+  lineinfile:
+    dest: /usr/sbin/openvas-mkcert
+    regexp: "^SRVCERT_LIFETIME=\"365\""
+    line: "SRVCERT_LIFETIME=\"{{ usm_openvas_cert_lifetime }}\""
+    state: present
+
+- name: Get system date
+  shell: date '+%s'
+  register: __usm_openvas_sysdate
+
+- include: renew-ca-server.yml
+- include: renew-client.yml
+- include: update-scanner.yml
+  when: __usm_ca_renewal == True or __usm_client_renewal == True

@@ -1,0 +1,16 @@
+---
+- name: Get CA/Server certificate end date
+  shell: "openssl x509 -in /var/lib/openvas/CA/servercert.pem -noout -enddate | grep notAfter | awk -F= '{print $2}' | date '+%s' -f -"
+  register: __usm_openvas_certdate
+  changed_when: false
+
+- name: Determine if CA/Server certificate need renewal
+  set_fact:
+    __usm_ca_renewal: "{{ ((__usm_openvas_certdate.stdout|int) - (usm_openvas_cert_allowance|int) ) <= (__usm_openvas_sysdate.stdout|int) }}"
+
+- name: Recreate ca & server certificates
+  when: __usm_ca_renewal == True
+  shell: "openvas-mkcert -f -q"
+  register: __usm_cert_results
+  changed_when: __usm_cert_results.rc == 0
+  failed_when: __usm_cert_results.rc == 1

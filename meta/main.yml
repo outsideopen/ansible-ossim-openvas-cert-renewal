@@ -1,0 +1,19 @@
+---
+dependencies: []
+galaxy_info:
+  role_name: usm-openvas-cert-renewal
+  author: David Lundgren
+  company: Outside Open
+  description: USM/OSSIM OpenVAS certificate renewal
+  license: MIT
+  min_ansible_version: 2.0
+  platforms:
+    - name: Debian
+      versions:
+        - jessie
+        - stretch
+  galaxy_tags:
+    - system
+    - usm
+    - ossim
+    - openvas
