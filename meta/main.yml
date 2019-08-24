@@ -1,7 +1,7 @@
 ---
 dependencies: []
 galaxy_info:
-  role_name: usm-openvas-cert-renewal
+  role_name: ossim-openvas-cert-renewal
   author: David Lundgren
   company: Outside Open
   description: USM/OSSIM OpenVAS certificate renewal
