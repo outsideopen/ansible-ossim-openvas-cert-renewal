@@ -6,10 +6,10 @@
 
 - name: Determine if client certificate needs renewal
   set_fact:
-    __usm_cert_renewal: "{{ ((__usm_openvas_certdate.stdout|int) - (usm_openvas_cert_allowance|int) ) <= (__usm_openvas_sysdate.stdout|int) }}"
+    __usm_client_renewal: "{{ ((__usm_openvas_certdate.stdout|int) - (usm_openvas_cert_allowance|int) ) <= (__usm_openvas_sysdate.stdout|int) }}"
 
 - name: Recreate client certificate
-  when: __usm_ca_renewal == True or __usm_client_renewal == True
+  when: __usm_ca_renewal or __usm_client_renewal
   shell: "openvas-mkcert-client -n -i"
   register: __usm_cert_results
   changed_when: __usm_cert_results.rc == 0

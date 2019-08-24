@@ -9,7 +9,7 @@
     __usm_ca_renewal: "{{ ((__usm_openvas_certdate.stdout|int) - (usm_openvas_cert_allowance|int) ) <= (__usm_openvas_sysdate.stdout|int) }}"
 
 - name: Recreate ca & server certificates
-  when: __usm_ca_renewal == True
+  when: __usm_ca_renewal
   shell: "openvas-mkcert -f -q"
   register: __usm_cert_results
   changed_when: __usm_cert_results.rc == 0
