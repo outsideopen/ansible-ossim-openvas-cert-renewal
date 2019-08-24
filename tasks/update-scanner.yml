@@ -1,11 +1,15 @@
 ---
 - name: Get scanner ID
   shell: 'openvasmd --get-scanners | grep Default | head -n 1 | cut -d" " -f1'
-  register: scanner_id
+  register: __usm_scanner_id
   changed_when: false
+  failed_when: false
 
 - name: Install new scanner key
-  shell: "openvasmd --modify-scanner {{ scanner_id.stdout }} --scanner-ca-pub /var/lib/openvas/CA/cacert.pem --scanner-key-pub /var/lib/openvas/CA/clientcert.pem --scanner-key-priv /var/lib/openvas/private/CA/clientkey.pem"
+  shell: "openvasmd --modify-scanner {{ __usm_scanner_id.stdout }} --scanner-ca-pub /var/lib/openvas/CA/cacert.pem --scanner-key-pub /var/lib/openvas/CA/clientcert.pem --scanner-key-priv /var/lib/openvas/private/CA/clientkey.pem"
+  register: __usm_scanner_results
+  changed_when: __usm_scanner_results.rc == 0
+  failed_when: __usm_scanner_results.rc == 1
 
 - name: restart services
   service:
