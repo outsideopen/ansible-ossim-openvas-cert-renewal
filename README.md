@@ -1,5 +1,7 @@
 # Ansible Role: USM/OSSIM openvas certificate renewal
 
+**NOTE** This repository has been archived, while the process may work for older versions of OSSIM, it no longer works for versions released after OSSIM 9 was replaced in the installation
+
 Updates the OpenVAS certificates on a USM/OSSIM appliance.
 
 This is based on the instructions on this page [How do I resolve OpenVAS expired certificate issues?](https://success.alienvault.com/s/article/How-do-I-resolve-OpenVAS-expired-certificate-issues) 
